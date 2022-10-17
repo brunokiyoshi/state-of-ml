@@ -2,11 +2,20 @@
 # visit http://127.0.0.1:8050/ in your web browser.
 
 from dash import Dash, dcc, html
+import dash_bootstrap_components as dbc
 import plotly.express as px
 import pandas as pd
 import os
 
-app = Dash(__name__)
+THEME = 'bootstrap'
+app = Dash(
+    __name__,
+    external_stylesheets=[
+        getattr(dbc.themes, THEME.upper()),
+        f'https://cdn.jsdelivr.net/gh/tcbegley/dash-bootstrap-css@main/dist/{THEME.lower()}/bootstrap.min.css'
+    ],
+    suppress_callback_exceptions=True
+)
 
 colors = {
     'background': '#ffffff',
@@ -15,7 +24,7 @@ colors = {
 
 str_datafolder = "kaggle-survey-2022"
 str_datafile = "kaggle_survey_2022_responses.csv"
-str_filepath = os.path.join(os.getcwd() ,str_datafolder,str_datafile)
+str_filepath = os.path.join(str_datafolder,str_datafile)
 df_main = pd.read_csv(str_filepath, skiprows=[1]) # ignore first row which is question statement
 df_questions = pd.read_csv(str_filepath, nrows=1) # question statements
 
